@@ -28,6 +28,21 @@ for x in autos:
 
 
 
+Query associated with range search:
+$gt, $lt, $gte, $lte, $ne
+
+query = {"population" : {"$gt": 25000, "$lte": 50000}}
+query = {"name" : {"gte" : "X", "$lt" : Y}}  # return those begin with letter X
+
+$regex Operator:
+
+
+Remove documents from collections in MongoDB:
+db.cities.remove( {"name" : {"$exists" : 0 } }  )
+
+
+
+
 
 
 
