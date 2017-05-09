@@ -1,0 +1,33 @@
+Notes for MongoDB:
+
+Query:
+
+Query is a command that we send to database to find data.
+By default, queries in MongoDB return all fields in matching documents.
+For example:
+
+query = {"manufacturer": "Porsche"}
+autos = db.autos.find(query)
+
+will return all page content that match the manufacturer field with Porsche.
+
+To limit the amount of data that MongoDB sends to applications, you can include a projection document to specify or restrict fields to return.
+
+Projection:
+For example:
+projection = {"_id": 0, "name": 1}
+autos = db.autos.find(query,projection)
+
+By doing so, the MongoDB will only send the projected data and in the format of 0 field as ID and 1 field as name.
+
+
+Insert Documents into collections in MongoDB
+
+for x in autos:
+	db.myautos.insert(x)
+
+
+
+
+
+
