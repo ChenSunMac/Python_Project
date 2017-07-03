@@ -23,3 +23,5 @@ emp2 = Employee("Manni", 5000)
 emp1.displayEmployee()
 emp2.displayEmployee()
 print (' Total Employee number is {} '.format(Employee.empCount))
+
+print("Wang si tu...")
