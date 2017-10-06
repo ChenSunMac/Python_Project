@@ -62,12 +62,42 @@ knn.score(X_test, y_test)
 fruit_prediction = knn.predict([[20, 4.3, 5.5]])
 lookup_fruit_name[fruit_prediction[0]]
 
+# second example: a larger, elongated fruit with mass 100g, width 6.3 cm, height 8.5 cm
+fruit_prediction = knn.predict([[100, 6.3, 8.5]])
+lookup_fruit_name[fruit_prediction[0]]
+
+### How sensitive is k-NN classification accuracy to the  choice of the k Parameter
+k_range = range(1,20)
+scores = []
+
+for k in k_range:
+    knn = KNeighborsClassifier(n_neighbors = k)
+    knn.fit(X_train, y_train)
+    scores.append(knn.score(X_test, y_test))
+
+plt.figure()
+plt.xlabel('k')
+plt.ylabel('accuracy')
+plt.scatter(k_range, scores)
+plt.xticks([0,5,10,15,20]);
 
 
+### How sensitive is k-NN classification accuracy to the train/test split proportion?
 
+t = [0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2]
 
+knn = KNeighborsClassifier(n_neighbors = 5)
 
+plt.figure()
 
+for s in t:
 
+    scores = []
+    for i in range(1,1000):
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 1-s)
+        knn.fit(X_train, y_train)
+        scores.append(knn.score(X_test, y_test))
+    plt.plot(s, np.mean(scores), 'bo')
 
-
+plt.xlabel('Training set proportion (%)')
+plt.ylabel('accuracy');
