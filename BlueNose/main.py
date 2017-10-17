@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 """
 Created on Tue Oct 03 11:08:09 2017
-
+Needs to run configs and ProcessingBinFile first...
+Need to check how to combine those files and run it.
+I guess #!?
 @author: chens
 """
 import sys
