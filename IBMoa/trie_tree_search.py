@@ -108,18 +108,25 @@ class Trie:
             queue = [node for key, node in top_node.children.iteritems()]
         else:
             queue = [top_node]
-        
-        # Perform a breadth first search under the prefix
-        # A cool effect of using BFS as opposed to DFS is that BFS will return
-        # a list of words ordered by increasing length
+        # Perform a Depth first search under the prefix
+        # will return a list of words ordered by appearance?
+        # need to check
         while queue:
-            # pop in defaults pop the last element in the list
-            current_node = queue.pop()
-            if current_node.data != None:
-                # Isn't it nice to not have to go back up the tree?
+            current_node = queue.pop(-1)
+            if current_node.data!=None:
                 words.append(current_node.data)
-            
-            queue = [node for key,node in current_node.children.iteritems()] + queue
+            queue = queue +  [node for key,node in current_node.children.iteritems()]
+#        # Perform a breadth first search under the prefix
+#        # A cool effect of using BFS as opposed to DFS is that BFS will return
+#        # a list of words ordered by increasing length
+#        while queue:
+#            # pop in defaults pop the last element in the list
+#            current_node = queue.pop()
+#            if current_node.data != None:
+#                # Isn't it nice to not have to go back up the tree?
+#                words.append(current_node.data)
+#            
+#            queue = [node for key,node in current_node.children.iteritems()] + queue
         
         return words
     
