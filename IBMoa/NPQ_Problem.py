@@ -6,6 +6,11 @@ output all the numbers from 1 to N, separate with comma
 However any number divisible by p or q should be replaced by "OUT"
 and the number whose digital representation include p or q should be replaced by "THINK"
 If both satisfied replace with "OUTTHINK"
+>>> NPQ (20,3,4)
+'1,2,OUTTHINK,OUTTHINK,5,OUT,7,OUT,OUT,10,11,OUT,THINK,THINK,OUT,OUT,17,OUT,19,OUT'
+
+>>> NPQ (7,2,3)
+'1,OUTTHINK,OUTTHINK,OUT,5,OUT,7'
 @author: chens
 """
 
