@@ -9,6 +9,7 @@ import re
 
 def clean_input(text):
     #non-alphanumeric character should be ignored
+    #text = re.sub('[^a-zA-Z0-9\s]', '', text)
     text = re.sub('[^a-zA-Z\s]', '', text)
     #Any other block of contiguous whitespace should be treated as a single space
     #white space should be retained
