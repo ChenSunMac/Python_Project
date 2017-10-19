@@ -1,0 +1,35 @@
+#!/usr/bin/env python2
+# -*- coding: utf-8 -*-
+"""
+Created on Wed Oct 18 23:11:48 2017
+
+@author: jojo
+"""
+
+import sys
+
+def NPQ(N, p, q):
+    resultList = []
+    for x  in range(1, N + 1):
+        mark1 = 0
+        mark2 = 0
+        listelement = str(x)
+        # any integer divisible by p should be replaced by the text OUT
+        if x % p == 0:
+            listelement = "OUT"
+            mark1 = -1
+        # any integer whose decimal representation contains digit q should be replaced by the text THINK
+        if q in [int(d) for d in str(x)]:
+            listelement = "THINK"
+            mark2 = -1
+        if mark1*mark2 > 0:
+            listelement = "OUTTHINK"
+        resultList.append(listelement)
+        #convert list to comma separated string
+    return ','.join(resultList)
+    
+for line in sys.stdin:
+    linesegment = line.split()
+    resultList = NPQ(int(linesegment[0]), int(linesegment[1]), int(linesegment[2]))
+    print(resultList)
+    

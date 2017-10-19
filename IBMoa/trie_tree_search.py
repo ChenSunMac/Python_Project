@@ -19,6 +19,8 @@ Example:
                         r
 @author: chens
 """
+import sys
+
 class Node:
     def __init__(self, label=None, data=None):
         self.label = label
@@ -153,3 +155,24 @@ if __name__ == '__main__':
     print trie.start_with_prefix('to')
     print trie.start_with_prefix('t')
     print trie.start_with_prefix('t')[0:3]
+    
+    PrintedOutput = ''
+    trie = Trie()
+    segmentlist = []
+    for line in sys.stdin:
+        segmentlist.append(line.strip())
+
+    for item in segmentlist[:-2]:
+        trie.add(item)
+
+    resultfound = sorted((trie.start_with_prefix(segmentlist[-1])))[0:3]
+    if resultfound:
+        if len(resultfound) < 3:
+            start = segmentlist[:-2].index(resultfound[0])
+            PrintedOutput = "\n".join(segmentlist[start:-2])
+        else:
+                PrintedOutput = "\n".join(resultfound)
+    else:
+                    PrintedOutput = '<NONE>'
+
+    print(PrintedOutput)
