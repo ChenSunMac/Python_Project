@@ -7,14 +7,15 @@ I guess #!?
 @author: chens
 """
 import sys
+import os
 sys.path.append('C:\\Users\\chens\\Documents\\GitHub\\Python_Project\\BlueNose') 
-import ProcessingBinFile
-import configs
 import matplotlib.pyplot as plt
+import configs
+import ProcessingBinFile
 
-configs
-
-ProcessingBinFile
+aclass.configsasdas();
+os.system("configs.py 1")
+os.system("ProcessingBinFile.py 1")
 
 for chn in range(0, 96):
     

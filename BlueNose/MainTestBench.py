@@ -1,16 +1,24 @@
 # -*- coding: utf-8 -*-
 """
-Created on Tue Oct 02 16:08:09 2017
-- Took specific path and file name (.bin) file
-- Processing it and output signal_matrices: 96 x 520 x 2000 mat (float64)
+Created on Thu Oct 19 14:32:22 2017
+
+Main Test Bench For BlueNose Project
+
+- Extract and processing [2000*1] points from one reference .bin file
+- TIME DOMAIN:
+    - thickness calculation
+    - energy calculation
+- Frequency Domain:
+    - thickness set calculation and picking
+    - energy calculation
 @author: chens
 """
-
 import numpy as np
 import os
 import sys
 import time
-
+#import matplotlib.pyplot as plt
+# BASIC INFORMATION OUTPUT
 print(sys.version)
 test_path = "C:\\Users\\chens\\Documents\\gui-dev\\SmallTempData\\0.3_ft_Run2"
 file_name = "bn170614-142902.bin"
@@ -47,12 +55,45 @@ for i in range(1, bin_file_size/32096 + 1):
         raw_first_ref = raw_data[start_byte+k*4008+32:start_byte +k*4008+34]
         first_ref = raw_first_ref.view('uint16')
         channel_index = raw_data[start_byte + k*4008 + 38].astype("int64")
-        
+        # FUTURE : add thickness and distance calculation here to save more time
         signal_matrices[channel_index, ii[0,channel_index], :] = raw_signal
         ii[0,channel_index] = ii[0,channel_index] + 1
     start_byte = start_byte +32096
-print 'It took', time.time()-start, 'seconds.'
-print ("DONE")
-    
+print ('It took', time.time()-start, 'seconds. to finish parsing Bin File')
+
+### CALLIPER MAP
+(TOTAL_CHN, TOTAL_ROUND, SIGNAL_LENGTH) = signal_matrices.shape
+
+for chn in range(TOTAL_CHN):
+    for rd in range(TOTAL_ROUND):
+        signal = signal_matrices[chn, rd, :]
+        norm_signal = signal/np.max(np.absolute(signal))
+        for timepoint in range(SIGNAL_LENGTH):
+            
+        
+
+#### PLOT
+#x = np.linspace(1, 2000, 2000)
+#y = signal_matrices[1,1,:]
+#plt.figure(figsize=(8,4))
+#plt.plot(x,y,label="signal from one channel",color="blue",linewidth=2)
+#plt.xlabel("Time(s)")
+#plt.ylabel("Normalized Amplitude")
+#plt.title("Signal Plot")
+#plt.ylim(-1,1)
+#plt.legend()
+#plt.show()
+#x1 = np.linspace(1, 1001, 1001)
+#test_signal = signal_matrices[1,1,:]
+#fft_result =  np.fft.rfft(test_signal, n=None, axis=-1, norm=None)
+#plt.plot(x1,fft_result,label="FFT RESULT",color="red",linewidth=2)
+#plt.xlabel("frequency(s)")
+#plt.ylabel("Normalized Amplitude")
+#plt.title("Signal Plot")
+#plt.ylim(-1,1)
+#plt.legend()
+#plt.show()
+
+
 
 
