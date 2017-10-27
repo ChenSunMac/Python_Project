@@ -18,7 +18,7 @@ import os
 import sys
 import time
 import AlgSet
-import threading
+
 import multiprocessing as mp
 #import matplotlib.pyplot as plt
 # BASIC INFORMATION OUTPUT
