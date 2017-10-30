@@ -60,7 +60,7 @@ if __name__ == "__main__":
     distance = AlgSet.calliperAlg(signal_matrices)
     print ('It took', time.time()-start_CALLIPER, 'seconds. to finish CALLIPER CALCULATION')            
     start_2 = time.time()
-    distance2  = AlgSet.processBinFileToDistanceMap(bin_file_size, raw_data)
+    distance2  = AlgSet.processBinFileToDistanceMap2(bin_file_size, raw_data)
     print ('It took', time.time()-start_2, 'seconds. to finish all in one function')   
     plt.imshow(distance, aspect='auto');
     plt.colorbar()
