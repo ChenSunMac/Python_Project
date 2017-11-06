@@ -58,6 +58,8 @@ def calliperAlg(signal_matrices):
             trigger = np.argmax(norm_signal > 0.594)
             if (trigger < 20) and (trigger > 1900):
                 trigger = 0;
+            else:
+                pass
                 #main_reflection = norm_signal[trigger - 20 : trigger + 280]
             distance[chn,rd] = (START_DELAY + trigger)*740.0/15000000;
     return distance
