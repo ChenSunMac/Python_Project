@@ -13,7 +13,8 @@ Created on Tue Oct 24 11:45:40 2017
 """
 import numpy as np
 import numba as nb
-
+from scipy import interpolate
+from detect_peaks import detect_peaks
 #@nb.jit
 def processBinFile(bin_file_size, raw_data):
     MATRICES_SIZE = (96, 520, 2000)
@@ -56,13 +57,52 @@ def calliperAlg(signal_matrices):
             norm_signal = signal/np.max(np.absolute(signal))
             # USE Numpy.argmax instead of for loop to save time
             trigger = np.argmax(norm_signal > 0.594)
-            if (trigger < 20) and (trigger > 1900):
-                trigger = 0;
+            if (trigger < 20) or (trigger > 1900):
+                trigger = 20;
             else:
                 pass
                 #main_reflection = norm_signal[trigger - 20 : trigger + 280]
             distance[chn,rd] = (START_DELAY + trigger)*740.0/15000000;
     return distance
+
+@nb.jit
+def CalliperAndThicknessNoCoating(signal_matrices, coating, s, trLayout):
+    timeFlight = 59
+    MAP_SIZE = (96, 520)
+    distance = np.zeros(MAP_SIZE)
+    thickness_map = np.zeros(MAP_SIZE) + timeFlight
+    START_DELAY = 6601;
+    TOTAL_CHN, TOTAL_ROUND, SIGNAL_LENGTH = signal_matrices.shape
+    for chn in range(TOTAL_CHN):        
+        for rd in range(TOTAL_ROUND):
+            signal = signal_matrices[trLayout[chn], rd, :]
+            norm_signal = signal/np.max(np.absolute(signal))
+            # USE Numpy.argmax instead of for loop to save time
+            trigger = np.argmax(norm_signal > 0.594)
+            if (trigger < 20) or (trigger > 1900):
+                trigger = 20
+            else:
+                pass
+            distance[chn,rd] = (START_DELAY + trigger)*740.0/15000000   
+            main_reflection = norm_signal[trigger - 20 : trigger + 280]
+            abs_conv_result = np.absolute(np.convolve(main_reflection, s))
+            peaks_locs = detect_peaks(abs_conv_result, mph = None, mpd = 20, 
+                                      show=False)
+            peaks_value = abs_conv_result[peaks_locs]
+            envelopObject = interpolate.interp1d(peaks_locs, peaks_value, kind='slinear')
+            xnew = np.linspace(peaks_locs[0], peaks_locs[-1], num=peaks_locs[-1] - peaks_locs[0] + 1)
+            envelop = envelopObject(xnew)
+            filtered_peaks_locs = detect_peaks(envelop, mph = None, mpd = 20, 
+                                      show=False)        
+            peak_diff = np.diff(filtered_peaks_locs)
+            if (coating == False):
+                if ( len(peak_diff) > 2 ):
+                    thickness_map[chn,rd] = np.median(peak_diff)
+                else:
+                    thickness_map[chn,rd] = timeFlight / 3
+    return  distance, thickness_map
+
+
 
 @nb.jit
 def processBinFileToDistanceMap(bin_file_size, raw_data):
@@ -88,8 +128,8 @@ def processBinFileToDistanceMap(bin_file_size, raw_data):
             #first_ref = raw_first_ref.view('uint16')
             channel_index = raw_data[start_byte + k*4008 + 38].astype("int64")
             trigger = np.argmax(norm_signal > 0.594)
-            if (trigger < 20) and (trigger > 1900):
-                trigger = 0;
+            if (trigger < 20) or (trigger > 1900):
+                trigger = 20;
                 #main_reflection = norm_signal[trigger - 20 : trigger + 280]
             distance[channel_index, ii[0,channel_index]] = (START_DELAY + trigger)*740.0/15000000;
             ii[0,channel_index] = ii[0,channel_index] + 1
@@ -122,8 +162,8 @@ def processBinFileToDistanceMap2(bin_file_size, raw_data):
             #first_ref = raw_first_ref.view('uint16')
             channel_index = raw_data[start_byte + k*4008 + 38].astype("int64")
             trigger = np.argmax(norm_signal > 0.594)
-            if (trigger < 20) and (trigger > 1900):
-                trigger = 0;
+            if (trigger < 20) or (trigger > 1900):
+                trigger = 20;
                 #main_reflection = norm_signal[trigger - 20 : trigger + 280]
             distance[channel_index, ii[0,channel_index]] = (START_DELAY + trigger)*740.0/15000000;
             ii[0,channel_index] = ii[0,channel_index] + 1
