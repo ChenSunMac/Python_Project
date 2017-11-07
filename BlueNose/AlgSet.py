@@ -97,7 +97,9 @@ def CalliperAndThicknessNoCoating(signal_matrices, coating, s, trLayout):
             peak_diff = np.diff(filtered_peaks_locs)
             if (coating == False):
                 if ( len(peak_diff) > 2 ):
-                    thickness_map[chn,rd] = np.median(peak_diff)
+                    thickness_point = np.median(peak_diff)
+                    if thickness_point <  timeFlight * 1.2:
+                        thickness_map[chn,rd] = thickness_point
                 else:
                     thickness_map[chn,rd] = timeFlight / 3
     return  distance, thickness_map

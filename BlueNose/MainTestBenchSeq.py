@@ -47,6 +47,7 @@ trLayout = [1, 33, 17, 29, 13, 93, 49, 81, 65, 77, 61, 21, 25, 9, 41, 5, 37,
             91, 55, 87, 47, 4, 36, 20, 32, 16, 96, 52, 84, 68, 80, 64, 24, 28,
             12, 44, 8, 40, 72, 76, 60, 92, 56, 88, 48]
 
+trLayout =  np.asarray(trLayout) - 1
 
         
 if __name__ == "__main__":
@@ -72,7 +73,41 @@ if __name__ == "__main__":
 #    distance = AlgSet.calliperAlg(signal_matrices)
 #    print ('It took', time.time()-start_CALLIPER, 'seconds. to finish CALLIPER CALCULATION')   
     start_CalliperAndThickness = time.time()
-    (distance, thickness_map) = AlgSet.CalliperAndThicknessNoCoating(signal_matrices, coating, s, trLayout)
+    timeFlight = 59
+    MAP_SIZE = (96, 520)
+    distance = np.zeros(MAP_SIZE)
+    thickness_map = np.zeros(MAP_SIZE) + timeFlight
+    START_DELAY = 6601;
+    TOTAL_CHN, TOTAL_ROUND, SIGNAL_LENGTH = signal_matrices.shape
+    for chn in range(TOTAL_CHN):        
+        for rd in range(TOTAL_ROUND):
+            signal = signal_matrices[trLayout[chn], rd, :]
+            norm_signal = signal/np.max(np.absolute(signal))
+            # USE Numpy.argmax instead of for loop to save time
+            trigger = np.argmax(norm_signal > 0.594)
+            if (trigger < 20) or (trigger > 1900):
+                trigger = 20
+            else:
+                pass
+            distance[chn,rd] = (START_DELAY + trigger)*740.0/15000000   
+            main_reflection = norm_signal[trigger - 20 : trigger + 280]
+            abs_conv_result = np.absolute(np.convolve(main_reflection, s))
+            peaks_locs = detect_peaks(abs_conv_result, mph = None, mpd = 20, 
+                                      show=False)
+            peaks_value = abs_conv_result[peaks_locs]
+            envelopObject = interpolate.interp1d(peaks_locs, peaks_value, kind='quadratic')
+            xnew = np.linspace(peaks_locs[0], peaks_locs[-1], num=peaks_locs[-1] - peaks_locs[0] + 1)
+            envelop = envelopObject(xnew)
+            filtered_peaks_locs = detect_peaks(envelop, mph = None, mpd = 20, 
+                                      show=False)        
+            peak_diff = np.diff(filtered_peaks_locs)
+            if (coating == False):
+                if ( len(peak_diff) > 2 ):
+                    thickness_point = np.median(peak_diff)
+                    if thickness_point <  timeFlight * 1.2:
+                        thickness_map[chn,rd] = thickness_point
+                else:
+                    thickness_map[chn,rd] = timeFlight / 3
     print ('It took', time.time()- start_CalliperAndThickness, 'seconds. to finish 2 maps')   
 
          
