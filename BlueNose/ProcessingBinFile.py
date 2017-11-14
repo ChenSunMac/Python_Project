@@ -1,4 +1,4 @@
-li# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 """
 Created on Tue Oct 02 16:08:09 2017
 - Took specific path and file name (.bin) file
