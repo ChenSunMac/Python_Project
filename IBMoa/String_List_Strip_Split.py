@@ -29,8 +29,6 @@ string = "blah, lots  ,  of ,  spaces, here "
 StringResult0 = [x.strip() for x in string.split(',')]
 
 
-
-
 print(StringResult0)
 
 
