@@ -82,17 +82,102 @@ def inOrderTraverseStrack(root):
     return results
 
 #------------------------------------------------------------------------------
+def dfs(root):
+    """
+    @param: {Node} root
     
+    @return: {[data]} list of node values 
+        Use Iterative method(STACK) to Deep First Trasversal the tree    
+    """
+    if root is None:
+        return []
+    visited, stack = [], [root]
+    while stack:
+        node = stack.pop()
+        visited.append(node)
+        if node.right:
+            stack.append(node.right)
+        if node.left:
+            stack.append(node.left)
+        return visited
+    
+def bfs(root):
+    """
+    @param: {Node} root
+    
+    @return: {[data]} list of node values 
+        Use Iterative method(QUEUE)  to Breadth First Traversal the tree    
+    """
+    if root is None:
+        return []
+    visited, queue = [], [root]
+    while queue:
+        node = queue.pop(0)
+        visited.append(node)
+        if node.left:
+            queue.append(node.left)        
+        if node.right:
+            queue.append(node.right)
+        return visited
+
+#------------------------------------------------------------------------------
+#　　　　　　　　　　　　　　　　1
+#
+#　　　　　　　　　　　　　　　/　  \
+#
+#　　　　　　　　　　　　　　 2       3
+#
+#　　　　　　　　　　　　　 /    \    /   \
+#
+#　　　　　　　　　　　　　4     5  6      7        
+# Return list of list 
+#       ordered by level(pre-order with level):
+#            breadth dirst traverse
+#       zig zag order (reverse at every odd level):          
+#           breadth dirst traverse + flag to reverse list
+
+def LevelOrder(root):
+    """
+    @param: {Node} root
+    
+    @return: {[data]} list of node values 
+        Use Iterative method(QUEUE)  to Breadth First Trasversal the tree    
+    """
+    if root is None:
+        return []
+    res, temp, queue = [], [], [root]
+    while queue:
+        for i in range(len(queue)):
+            node = queue.pop(0)
+            temp += [node.data]
+            if node.left:
+                queue += [node.left]
+            if node.right:
+                queue += [node.right]
+        res += [temp[::]]
+        temp = []
+    return res
 
 
+def zigzagLevelOrder(root):
+    if root is None:
+        return []
+    res, temp, queue, flag = [], [], [root], 1
+    while queue:
+        for i in range(len(queue)):
+            node = queue.pop(0)
+            temp += [node.data]
+            if node.left:
+                queue += [node.left]
+            if node.right:
+                queue += [node.right]
+        res += [temp[::flag]]
+        temp = []
+        flag*=-1
+    return res 
 
 
-
-
-
-
-
-
+#------------------------------------------------------------------------------
 def minDepthRecursive(root):
     """
     @param: {Node} root
