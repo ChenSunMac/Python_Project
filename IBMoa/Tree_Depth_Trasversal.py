@@ -18,19 +18,80 @@ class Node:
         self.data = data
         self.left = None
         self.right = None
-        
+#------------------------------------------------------------------------------
+def preOrderTraverseRecur(root):
+    """
+    @param : {Node} root
+    
+    @return: Preorder in ArrayList which contains node values.
+    """    
+    results = []
+    traverse(root, results)
+    return results
+    
+def traverse(root, results):
+    """
+    @param : {Node} root
+    @param : {[]} result   
 
-def preOrderTraverse(root):
+    @return: None
+    - Helper function for Recursive Traverse functions 
+        (Toggle sequence to implement pre, in and post order traverse)
+    """    
+    if root is None:
+        return
+    results.append(root.data)
+    traverse(root.left, results)
+    traverse(root.right, results)
+
+def preOrderTraversal(root):
+    if root is None:
+        return []
+    stack = [root]
+    result = []
+    while stack:
+        node = stack.pop()
+        result.append(node.val)
+        if node.right:
+            stack.append(node.right)
+        if node.left:
+            stack.append(node.left)
+    return result
+    
+#------------------------------------------------------------------------------
+
+def inOrderTraverseStrack(root):
     """
     @param: {Node} root
     
     @return: {[data]} list of node values 
-        Use Recursive method
+        Use Iterative method
     """    
+    p = root
+    stack = []
     results = []
     if root is None:
         return results
-    results.append(root.val)
+    while stack or p:
+        while p:
+            stack.append(p)
+            p = p.left
+        p = stack.pop()
+        results.append(p.data)
+        p = p.right
+    return results
+
+#------------------------------------------------------------------------------
+    
+
+
+
+
+
+
+
+
+
 
 def minDepthRecursive(root):
     """
@@ -142,3 +203,7 @@ print minDepthQueue(root)
 print maxDepthRecur(root)
 print maxDepthStack(root)
 
+print inOrderTraverseStrack(root)
+
+results = []
+print preOrderTraverseRecur(root)
