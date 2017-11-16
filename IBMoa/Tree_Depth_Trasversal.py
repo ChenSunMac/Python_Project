@@ -10,6 +10,9 @@ Tree Type Questions
     in-oder
     post-oder
 
+    DFS
+    BFS
+
 @author: Chens
 """
 
@@ -173,7 +176,7 @@ def zigzagLevelOrder(root):
                 queue += [node.right]
         res += [temp[::flag]]
         temp = []
-        flag*=-1
+        flag* = -1
     return res 
 
 
