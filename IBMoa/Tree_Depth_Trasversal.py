@@ -176,7 +176,7 @@ def zigzagLevelOrder(root):
                 queue += [node.right]
         res += [temp[::flag]]
         temp = []
-        flag* = -1
+        flag *= -1
     return res 
 
 
