@@ -57,7 +57,7 @@ def Dir_Parser(test_path):
             pass
         else:
             bn_YMDHM = file[:-6]
-            file_map[bn_YMDHM] = [f for f in file_list if f.startswith(bn_YMDHM)]    
+            file_map[bn_YMDHM] = [f for f in file_list if f.startswith(bn_YMDHM)]   
             
     if len(file_map) > 1:
         sorted_key_list = sorted(file_map.keys())
@@ -186,14 +186,14 @@ def plot_and_save(map_data, minute_key, IsThickness = False):
     if IsThickness == True:
         map_name = 'Thickness'
     plt.figure(figsize=(8,4))        
-    plt.imshow(distance_total_map, aspect='auto');
+    plt.imshow(distance_total_map, aspect='auto', vmax= 0.3, vmin= 0.4)
     plt.colorbar()
     plt.xlabel('Time Stamps')
     plt.ylabel('Channels ()')
     plt.savefig( map_name + '_map' + minute_key +'.png')
               
 if __name__ == "__main__":
-    test_path = "C:\\Users\\chens\\Documents\\gui-dev\\SmallTempData\\0.3_ft_Run2"
+    test_path = "C:\\Users\\chens\\Documents\\gui-dev\\SmallTempData\\0.3_ft_Run2\\testParallelData"
     file_map = Dir_Parser(test_path)
     start_PROCESSING = time.time()
  
@@ -230,6 +230,7 @@ if __name__ == "__main__":
         plot_and_save(distance_total_map, minute_key)        
         if need_thickness == True:
             plot_and_save(thickness_total_map, minute_key, need_thickness)
-            
+    print(distance_total_map.max())        
+    print(distance_total_map.min()) 
     print ('It took', time.time()-start_PROCESSING, 'seconds. to Finish all the Jobs')
         
