@@ -182,9 +182,9 @@ ring_set = {"ring1":np.arange(0, 96, 6), "ring2":np.arange(3, 96, 6),
             "ring5":np.arange(2, 96, 6), "ring6":np.arange(5, 96, 6)}
 ring_counter = 0
 index_ring_TDC_pool = np.zeros((6 , 520), dtype='uint')
-xAxis = np.zeros((6 , 520), dtype='uint')
-yAxis = np.zeros((6 , 520), dtype='uint')
-drift = np.zeros((6 , 520), dtype='uint')
+xAxis = np.zeros((6 , 520), dtype='float')
+yAxis = np.zeros((6 , 520), dtype='float')
+drift = np.zeros((6 , 520), dtype='float')
 
 for ring, ring_tdc_value in ring_set.items():
     
