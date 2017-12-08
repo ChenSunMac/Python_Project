@@ -178,7 +178,7 @@ def Thickness_CalliperAlg(signal_matrices, EZ = False):
                         thickness_map[chn,rd] = thickness_point
                 else:
                     thickness_map[chn,rd] = timeFlight
-    print(Done)
+    print("Done")
     return distance, thickness_map
 
 
